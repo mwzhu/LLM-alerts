@@ -1,0 +1,39 @@
+{
+  "data": [
+    {
+      "type": "scatter",
+      "mode": "lines",
+      "x": [],
+      "y": [],
+      "name": "0.1 BTC Value",
+      "fill": "none",
+      "yaxis": "y1"
+    }
+  ],
+  "layout": {
+    "title": { "text": "0.1 BTC Value over the Last 30 Days", "xanchor": "center", "x":0.5},
+    "autosize": true,
+    "xaxis": {
+      "title": "Date",
+      "showgrid": true,
+      "zeroline": true,
+      "showline": true,
+      "autorange": true,
+      "showticklabels": true,
+      "automargin": true,
+      "type": "date",
+      "tickformat": "%d\n%b",
+      "ticklabelmode": "period"
+    },
+    "yaxis": {
+      "title": "Value (USD)",
+      "showgrid": true,
+      "zeroline": true,
+      "showline": true,
+      "autorange": true,
+      "showticklabels": true,
+      "automargin": true,
+      "type": "linear"
+    }
+  }
+}
