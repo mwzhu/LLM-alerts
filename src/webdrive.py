@@ -8,7 +8,6 @@ from selenium.webdriver.chrome.options import Options
 from PIL import Image
 import time
 import io
-
 from PIL import ImageChops
 
 def stitch_images(image_filenames, output_filename):
@@ -30,9 +29,6 @@ def stitch_images(image_filenames, output_filename):
 
     # Save resulting image
     stitched_image.save(output_filename)
-
-
-
 
 
 

@@ -38,6 +38,7 @@ def promptGPT(systemprompt, userprompt, model=constants.model):
     print("""Inputting {} tokens into {}.""".format(num_tokens_from_messages(systemprompt+userprompt), model))
     response = openai.ChatCompletion.create(
       model=model,
+      temperature=0,
       messages=[
         {"role": "system", "content": systemprompt},
         {"role": "user", "content": userprompt}])
