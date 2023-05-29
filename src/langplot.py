@@ -28,6 +28,8 @@ class BarPlot(LangPlot):
     pass
 
 class PiePlot(LangPlot):
+    #same funcs as time serios but different logic
+    #
     pass
 
 class TimeSeriesPlot(LangPlot):
