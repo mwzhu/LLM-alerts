@@ -5,166 +5,59 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
+from selenium.common.exceptions import NoSuchElementException
 from PIL import Image
 import time
 import io
 from PIL import ImageChops
-import json
-from utils import promptGPT
-import re
-# def promptGPT(systemprompt, userprompt, model=constants.model):
-#     print("""Inputting {} tokens into {}.""".format(num_tokens_from_messages(systemprompt+userprompt), model))
-#     response = openai.ChatCompletion.create(
-#       model=model,
-#       temperature=0,
-#       messages=[
-#         {"role": "system", "content": systemprompt},
-#         {"role": "user", "content": userprompt}])
-#     return response["choices"][0]["message"]["content"]
+from selenium.webdriver.common.by import By
 
 
-system_prompt = """
-    As an AI, you have the capability to pull different types of blockchain information. A user will provide you with an address or ENS (Ethereum Name Service) and specify whether they want to see tokens, NFTs, or transaction history associated with that address or ENS. Based on this input, you will output a command in a structured JSON format to get a screenshot of the required information.
-
-    For example, if a user says "Could you display the NFTs associated with the account @elonmusk.eth?", your output would be:
-    { 
-        "command": "screenshot",
-        "address_or_ens": "elonmusk.eth",
-        "twitter_handle": "elonmusk.eth",
-        "type_of_screenshot": "nfts"
-    }
-  User: "Can you provide the transaction history for my ENS mywallet.eth?"
-   AI Output:
-   { 
-     "command": "screenshot",
-     "address_or_ens": "mywallet.eth",
-     "twitter_handle": "N/A",
-     "type_of_screenshot": "transaction history"
-   }
-"""
-
-def webDriveLLM(user_input):
-
-    llm_result = promptGPT(system_prompt, user_input)
-    #parse the json in the response
-    # res = json.loads(res)
-    # Extract the JSON command
-    command_match = re.search(r'{(.+?)}', llm_result, re.DOTALL)
-    command_json_str = command_match.group(0)
-
-    # Extract the comment
-    comment = llm_result.replace(command_json_str, '').strip()
-
-    # Parse the command JSON
-    command_json = json.loads(command_json_str)
-    #get the address or ens
-    address_or_ens = command_json["address_or_ens"]
-    #get the type of screenshot
-    type_of_screenshot =  command_json["type_of_screenshot"]
-    #get the twitter handle
-    twitter_handle =  command_json["twitter_handle"]
-
-    url = screenshot_of_zerion_page(address_or_ens)
-    return url
-
-# webDriveLLM("Can you provide the transaction history for my ENS vitalik.eth?")
-
-
-
-
-
-#STICHES IMAGES TOGETHER
-def stitch_images(image_filenames, output_filename):
-    # Load images
-    images = [Image.open(filename) for filename in image_filenames]
-
-    # Determine total width and maximum height
-    total_width = max(image.size[0] for image in images)
-    max_height = sum(image.size[1] for image in images)
-
-    # Create new image object for result
-    stitched_image = Image.new('RGB', (total_width, max_height))
-
-    # Paste images
+def stitch_images(screenshots, height_deltas, output_filename):
+    # Get total width from the first screenshot
+    total_width = screenshots[0].size[0]
+    total_height = sum(screenshot.size[1] for screenshot in screenshots)
+    # Create a new image object with the total height and width of all screenshots
+    stitched_image = Image.new('RGB', (total_width, total_height))
+    # Paste screenshots into new image object
     current_height = 0
-    for image in images:
-        stitched_image.paste(image, (0, current_height))
-        current_height += image.size[1]
-
-     
-    left_crop = 500
-    right_crop = total_width - 300
-    stitched_image = stitched_image.crop((left_crop, 0, right_crop, max_height))
-
-
-    # Save resulting image
+    height_deltas.pop(0)
+    height_deltas.append(0)
+    for (screenshot, height) in list(zip(screenshots,height_deltas)):
+        stitched_image.paste(screenshot, (0, current_height))
+        current_height += height#screenshot.size[1]
+    # Save stitched image
+    print(output_filename)
     stitched_image.save(output_filename)
-    print("Saved stitched image as: ", output_filename)
     return output_filename
 
 
+def screenshot_of_zerion_page(address, _type, filename=''):
+    if filename == '':
+        filename=f'{address}_{_type}.png'
+    valid_types = ['tokens', 'nfts', 'history'] #tokens= /overview in url
 
-#TAKES 2 SCREENSHOTS
-def screenshot_full_page(driver, filename):
-    temp_filenames = []
-    # Calculate total height of the page
-    total_height = driver.execute_script("return document.body.parentNode.scrollHeight")
-    
-    # Initial viewport height (by JavaScript)
-    viewport_height = driver.execute_script("return window.innerHeight")
-    
-    # Store all screenshots in a list
-    screenshots = []
+    #default
+    if _type not in valid_types: _type = 'overview'
 
-    # Scroll and capture screenshots
-    for offset in range(0, total_height, int(viewport_height * 0.99)):  # Update here
-        driver.execute_script(f"window.scrollTo(0, {offset});")
-        # Wait to load page
-        time.sleep(2)
-        
-        # Take screenshot and append to list of screenshots
-        screenshot_as_png = driver.get_screenshot_as_png()
-        screenshot = Image.open(io.BytesIO(screenshot_as_png))
-        temp_filename = (filename.replace(".png", "") + "SC_" + str(offset) + ".png")
-        screenshot.save(temp_filename)
-        temp_filenames.append(temp_filename)
-        screenshots.append(screenshot)
-
-    # Get total width from the first screenshot
-    total_width = screenshots[0].size[0]
-
-    # Create a new image object with the total height and width of all screenshots
-    stitched_image = Image.new('RGB', (total_width, total_height))
-
-    # Paste screenshots into new image object
-    current_height = 0
-    for screenshot in screenshots:
-        # Here we'll use paste(), which pastes the image at specified location.
-        stitched_image.paste(screenshot, (0, current_height))
-        current_height += screenshot.size[1]
-
-
-    # Save stitched imageaf
-    # stitched_image.save(filename)
-    # print("Saved screenshot as ", filename)
-    
-    return temp_filenames 
-   
-
-
-from PIL import Image
-
-def screenshot_of_zerion_page(address):
+    if _type == 'tokens':
+        _type == 'overview'
+    if 'nft' in _type:
+        _type = 'nfts'
+     #if type includes 'history'
+    if 'history' in _type or 'transactions' in _type:
+    #or 'transactions' in type
+        _type = 'history'
     # Setup Chrome options
     chrome_options = Options()
-    # chrome_options.add_argument("--headless") 
+    chrome_options.add_argument("--headless") 
     chrome_options.add_argument("--start-maximized")
     # chrome_options.add_argument("--window-size=375x812")  # iPhone X dimensions   
 
     # Set the webdriver
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
     # Navigate to url
-    url = f'https://app.zerion.io/{address}/overview'
+    url = f'https://app.zerion.io/{address}/{_type}'
     driver.get(url)
 
     # Let the page load
@@ -193,15 +86,56 @@ def screenshot_of_zerion_page(address):
     except Exception as e:
         print(f"Button not found or not clickable. Exception: {str(e)}")
 
-    # Screenshot and save
-    screenshots_filenames = screenshot_full_page(driver, f'{address}_overview.png')
-    screenshot_full_url = stitch_images(screenshots_filenames, f'{address}_overview.png')
+    temp_filenames = []
+    # Calculate total height of the page
+    total_height = driver.execute_script("return document.body.scrollHeight")
+    try:
+        menubar = driver.find_element(By.CLASS_NAME, "MobileVersionTopBar-m4hzw4-0.igRbyj")
+        menubar2 = driver.find_element(By.CLASS_NAME, "MobileVersionSpaceBetween-m4hzw4-1.hIGhpK")
+        element = driver.find_element(By.CLASS_NAME, "PageContentColumn-uudlam-0.gfHdoP")
+        element2 = driver.find_element(By.CLASS_NAME, "sharedHStack-sc-1qg837v-1.iiBdOd")
+        element3 = driver.find_element(By.CLASS_NAME, "SpacerSpacerElement-sc-6ie5tt-0.eiiqPJ")
+        driver.execute_script("arguments[0].style.setProperty('display', 'none', 'important');", menubar)
+        driver.execute_script("arguments[0].style.setProperty('display', 'none', 'important');", menubar2)
+        driver.execute_script("arguments[0].style.setProperty('display', 'none', 'important');", element)
+        driver.execute_script("arguments[0].style.setProperty('display', 'none', 'important');", element2)
+        driver.execute_script("arguments[0].style.setProperty('display', 'none', 'important');", element3)
+    except NoSuchElementException as e:
+        print(e)
+    #driver.execute_script("arguments[0].style.display = 'none';", element)
+    # Initial viewport height (by JavaScript)
+    #viewport_height = driver.execute_script("return window.innerHeight")
+    viewport_height = 600
+    driver.set_window_size(1024, 600)
     
-    # Close the driver
+    # Store all screenshots in a list
+    screenshots = []
+    height_deltas = []
+    prev = 0
+    # Scroll and capture screenshots
+    for offset in range(0, total_height, viewport_height):
+        driver.execute_script(f"window.scrollTo(0, {offset});")
+        # Wait to load page
+        time.sleep(2)
+        # Hide scrollbar
+        driver.execute_script("document.body.style.overflow = 'hidden';")
+        screenshot_as_png = driver.get_screenshot_as_png()
+        driver.execute_script("document.body.style.overflow = 'auto';")
+        screenshot = Image.open(io.BytesIO(screenshot_as_png))
+        screenshots.append(screenshot)
+        height = driver.execute_script("return window.scrollY;")
+        height_deltas.append(height-prev)
+        prev = height
+    stitch_images(screenshots, height_deltas, filename)
+    print("Saved screenshot as ", filename)
+    return 0#stitch_images(temp_filenames, "0x5a68c82e4355968db53177033ad3edcfd62accca_overview.png")
+    # Screenshot and save
+    screenshot_full_page(driver, )
+    # Navigate to url
+    driver.delete_all_cookies()  # Clear cookies
     driver.close()
     driver.quit()
     return [screenshot_full_url, url]
 
 # Test with an address
-
-# screenshot_of_zerion_page("0xd8da6bf26964af9d7eed9e03e53415d37aa96045")
+screenshot_of_zerion_page("0xb6126af43b52ebd59afa0be472649035a0df6da7", _type="nft")
