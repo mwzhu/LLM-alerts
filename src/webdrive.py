@@ -39,9 +39,13 @@ def screenshot_full_page(driver, filename):
     # Calculate total height of the page
     total_height = driver.execute_script("return document.body.scrollHeight")
     #Remove the damn header
+    menubar = driver.find_element(By.CLASS_NAME, "MobileVersion__TopBar-m4hzw4-0.igRbyj")
+    menubar2 = driver.find_element(By.CLASS_NAME, "MobileVersion__SpaceBetween-m4hzw4-1.hIGhpK")
     element = driver.find_element(By.CLASS_NAME, "PageContentColumn-uudlam-0.gfHdoP")
     element2 = driver.find_element(By.CLASS_NAME, "shared__HStack-sc-1qg837v-1.iiBdOd")
     element3 = driver.find_element(By.CLASS_NAME, "Spacer__SpacerElement-sc-6ie5tt-0.eiiqPJ")
+    driver.execute_script("arguments[0].style.setProperty('display', 'none', 'important');", menubar)
+    driver.execute_script("arguments[0].style.setProperty('display', 'none', 'important');", menubar2)
     driver.execute_script("arguments[0].style.setProperty('display', 'none', 'important');", element)
     driver.execute_script("arguments[0].style.setProperty('display', 'none', 'important');", element2)
     driver.execute_script("arguments[0].style.setProperty('display', 'none', 'important');", element3)
