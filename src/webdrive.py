@@ -35,7 +35,7 @@ def stitch_images(screenshots, height_deltas, output_filename):
 def screenshot_of_zerion_page(address, _type, filename=''):
     if filename == '':
         filename=f'{address}_{_type}.png'
-    valid_types = ['tokens', 'nfts', 'history'] #tokens= /overview in url
+    valid_types = ['tokens', 'nfts', 'transactions'] #tokens= /overview in url
 
     #default
     if _type not in valid_types: _type = 'overview'
@@ -50,7 +50,7 @@ def screenshot_of_zerion_page(address, _type, filename=''):
         _type = 'history'
     # Setup Chrome options
     chrome_options = Options()
-    chrome_options.add_argument("--headless") 
+    # chrome_options.add_argument("--headless") 
     chrome_options.add_argument("--start-maximized")
     # chrome_options.add_argument("--window-size=375x812")  # iPhone X dimensions   
 
@@ -128,9 +128,14 @@ def screenshot_of_zerion_page(address, _type, filename=''):
         prev = height
     stitch_images(screenshots, height_deltas, filename)
     print("Saved screenshot as ", filename)
-    return 0#stitch_images(temp_filenames, "0x5a68c82e4355968db53177033ad3edcfd62accca_overview.png")
+    #put these in or no? v
+    driver.delete_all_cookies()  # Clear cookies
+    driver.close()
+    driver.quit()
+    return [filename, url] 
+
     # Screenshot and save
-    screenshot_full_page(driver, )
+    # screenshot_full_page(driver, )
     # Navigate to url
     driver.delete_all_cookies()  # Clear cookies
     driver.close()
@@ -138,4 +143,4 @@ def screenshot_of_zerion_page(address, _type, filename=''):
     return [screenshot_full_url, url]
 
 # Test with an address
-screenshot_of_zerion_page("0xb6126af43b52ebd59afa0be472649035a0df6da7", _type="nft")
+# screenshot_of_zerion_page("0xb6126af43b52ebd59afa0be472649035a0df6da7", _type="overview")

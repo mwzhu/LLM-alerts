@@ -4,7 +4,7 @@ User input: hey show my vitalik.eth's transaction history
   "command": "screenshot",
   "address_or_ens": "vitalik.eth",
   "twitter_handle": "N/A",
-  "type_of_screenshot": "transaction history"
+  "type_of_screenshot": "transactions"
 }+
 ===========
 User input: show nfts of 0x319851i3un1ond
@@ -20,13 +20,29 @@ User input: lets see the holdings of 0x12r1dw1wd21
   "command": "screenshot",
   "address_or_ens": "0x319851i3un1ond",
   "twitter_handle": "N/A",
-  "type_of_screenshot": "token_holdings"
+  "type_of_screenshot": "tokens"
 }+
 ===========
 User input: show me langwallet.eth's nfts
 +{
   "command": "screenshot",
   "address_or_ens": "langwallet.eth",
+  "twitter_handle": "N/A",
+  "type_of_screenshot": "nfts"
+}+
+===========
+User input: show me langwallet.eth's transactions
++{
+  "command": "screenshot",
+  "address_or_ens": "langwallet.eth",
+  "twitter_handle": "N/A",
+  "type_of_screenshot": "transactions"
+}+
+===========
+User input: nfts of 0x5A68C82e4355968DB53177033ad3eDCfD62aCCcA
++{
+  "command": "screenshot",
+  "address_or_ens": "0x5A68C82e4355968DB53177033ad3eDCfD62aCCcA",
   "twitter_handle": "N/A",
   "type_of_screenshot": "nfts"
 }+

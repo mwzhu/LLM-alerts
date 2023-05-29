@@ -35,7 +35,7 @@ system_prompt_template = """As an AI, you have the capability to pull different 
         "command": "screenshot",
         "address_or_ens": "mywallet.eth",
         "twitter_handle": "N/A",
-        "type_of_screenshot": "transaction history"
+        "type_of_screenshot": "transactions"
     }
     Other relevant examples: 
     {EXAMPLES_STRING}
@@ -85,6 +85,8 @@ def web_drive_LLM(user_input):
     #format prompt 
 
     llm_result = promptGPT(system_prompt, user_input)
+    print('llm_result: ', llm_result)
+
     #parse the json in the response
     # res = json.loads(res)
     # Extract the JSON command
@@ -105,8 +107,8 @@ def web_drive_LLM(user_input):
     twitter_handle =  command_json["twitter_handle"]
 
     if (command == 'screenshot'):
-        screenshot_url, webpage_url = screenshot_of_zerion_page(address_or_ens)
-        print('returning image at path:', screenshot_url)
-        return [screenshot_url, webpage_url]
+        filename, webpage_url = screenshot_of_zerion_page(address_or_ens, type_of_screenshot)
+        print('returning image at path:', filename)
+        return [filename, webpage_url]
 
 # web_drive_LLM("Can you provide the transaction history for ENS vitalik.eth?")

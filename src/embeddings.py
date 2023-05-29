@@ -73,3 +73,6 @@ def create_vector_store(inputFile=None, outputDirectory=None):
 
 
 
+# usage:
+# db = create_vector_store(inputFile='examples.txt', outputDirectory='vectordb-visuals')
+# print(db)
