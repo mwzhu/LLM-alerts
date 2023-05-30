@@ -1,24 +1,24 @@
-# LLM-Visuals - LangWallet's visual to return to users + a sub-set of [crypto] commands codebase
+# LLM-Visuals - LangWallet's visuals to return to users + a sub-set of [crypto] commands codebase
 
-# Turns natural language into 1) wallet / market data plots 2) wallet screenshots 3) commands to return to the user (through twitter, text, api etc.)
+## Turns natural language into 1) wallet / market data plots 2) wallet screenshots 3) commands to return to the user (through twitter, text, api etc.)
 
 This repository contains code for plotting cryptocurrency wallet data using the `langplot` library.
 
-# Create a virtual environment
+## Create a virtual environment
 `virtualenv .venv`
 
-# Copy the environment template file
+## Copy the environment template file
 `cp env_template.sh env.sh`
 
-# Replace the placeholder values in env.sh with your API keys
+## Replace the placeholder values in env.sh with your API keys
 
-# Run `source env.sh`
+## Run `source env.sh`
 
-# Install the required dependencies
+## Install the required dependencies
 `pip3 install -r requirements.txt`
 
 
-# Entrypoint: main.py - or call individual functions
+## Entrypoint: main.py - or call individual functions
 
 
 ```
@@ -34,7 +34,7 @@ This repository contains code for plotting cryptocurrency wallet data using the 
 - `plotter = factory.create_plotter()`
 - `plotter.plot(theme='plotly_dark')`
 
-## TODO
+## TODO - (Nelson's):
 
 1. **Scalability via Celery and RabbitMQ**: On deployment, this is main priority.
 
