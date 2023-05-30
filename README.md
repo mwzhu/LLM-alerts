@@ -1,23 +1,26 @@
-# LLM-Plot
+# LLM-Visuals - LangWallet's visual to return to users + a sub-set of [crypto] commands codebase
 
-This repository contains code for plotting cryptocurrency wallet data using the `walletviz` library.
+# Turns natural language into 1) wallet / market data plots 2) wallet screenshots 3) commands to return to the user (through twitter, text, api etc.)
 
-## Install
-
-```bash
-# Clone the repository
-git clone https://github.com/nelsontodd/llm-plot
+This repository contains code for plotting cryptocurrency wallet data using the `langplot` library.
 
 # Create a virtual environment
-virtualenv .venv
+`virtualenv .venv`
 
 # Copy the environment template file
-cp env_template.sh env.sh
+`cp env_template.sh env.sh`
 
 # Replace the placeholder values in env.sh with your API keys
 
+# Run `source env.sh`
+
 # Install the required dependencies
-pip3 install -r requirements.txt
+`pip3 install -r requirements.txt`
+
+
+# Entrypoint: main.py - or call individual functions
+
+
 ```
 ## Example Usage
 
