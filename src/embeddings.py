@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import numpy as np
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.text_splitter import CharacterTextSplitter
-from langchain.vectorstores import DocArrayHnswSearch
+# from langchain.vectorstores import DocArrayHnswSearch
 from langchain.document_loaders import TextLoader
 from langchain.docstore.document import Document
 import re

@@ -50,7 +50,7 @@ itsdangerous==2.1.2
 jedi==0.18.2
 Jinja2==3.1.2
 kiwisolver==1.4.4
-langchain==0.0.163
+langchain==0.0.184
 MarkupSafe==2.1.2
 marshmallow==3.19.0
 marshmallow-enum==1.5.1
@@ -121,4 +121,13 @@ wsproto==1.2.0
 yarl==1.9.2
 zipp==3.15.0
 webdriver_manager
-faiss
+flask
+openai
+python-dotenv
+transformers
+numpy
+scikit-learn
+faiss-cpu
+torch
+llama-index
+accelerate
