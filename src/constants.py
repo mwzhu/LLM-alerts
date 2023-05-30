@@ -3,7 +3,7 @@ import openai
 openai.api_key = os.getenv("OPENAI_API_KEY")
 model = os.getenv("OPENAI_MODEL")
 username=os.getenv("OPENAI_USER")
-output_path = os.getenv("PROJECT_DIR")+"/outputs/"
+output_path = os.getenv("PROJECT_DIR")+"/outputs/" 
 data_path = os.getenv("PROJECT_DIR")+"/market-data/"
 os.makedirs(output_path, exist_ok=True)
 os.makedirs(data_path, exist_ok=True)
