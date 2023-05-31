@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import numpy as np
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.text_splitter import CharacterTextSplitter
-# from langchain.vectorstores import DocArrayHnswSearch
+from langchain.vectorstores import DocArrayHnswSearch
 from langchain.document_loaders import TextLoader
 from langchain.docstore.document import Document
 import re
@@ -21,7 +21,6 @@ def get_similar_embeddings(query='whats price of eth', k=3, vector_dir='vectordb
     db = FAISS.load_local(vector_dir, embeddings=embeddings)
 
     # get similar embeddings
-    # similar_embeddings = db.similarity_search_with_score('whats price of eth', k=k)
     similar_embeddings = db.similarity_search_with_score(query, k=k)
 
     result = []
@@ -30,7 +29,6 @@ def get_similar_embeddings(query='whats price of eth', k=3, vector_dir='vectordb
         combined_string = doc.page_content + ' ' + ' '.join([f'{k}:{v}' for k, v in doc.metadata.items()])
         result.append(combined_string)
 
-    print(result)
     return result
 
 # USAGE:

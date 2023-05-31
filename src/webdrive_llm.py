@@ -78,7 +78,7 @@ def web_drive_LLM(user_input):
         system_prompt =system_prompt_template.replace("{ENS}", "")
 
 
-    system_prompt = system_prompt.replace("{EXAMPLES_STRING", EXAMPLES_STRING)
+    system_prompt = system_prompt.replace("{EXAMPLES_STRING}", EXAMPLES_STRING)
     #format the prompt
     # system_prompt = PromptTemplate(system_prompt, EXAMPLES_STRING)
     # template = system_prompt

@@ -100,15 +100,20 @@ class PlotterFactory:
         ##Prompt #1 of 2: ~350 tokens
         rawtext = utils.promptGPT(constants.INSTRUCTIONS_JSON,
             prompt, self.model)
+        print(rawtext)
         raw = json.loads(rawtext)
+        print(raw)
         instructions_json = self.reformat(raw)
+        print(instructions_json)
         instructions_json['ASSETS'] = list(map(lambda x: coingecko_api.match_coin_id(x),
             instructions_json['ASSETS']))
+        print(instructions_json)
         def fuzzymatch_keys(original_dict):
             return {coingecko_api.match_coin_id(k): v for k, v in original_dict.items()}
 
         instructions_json['REQUIRED_ASSET_DATA'] = fuzzymatch_keys(instructions_json['REQUIRED_ASSET_DATA'])
         self.instructions = instructions_json
+        print(instructions_json)
 
     @staticmethod
     def reformat(instructions_json):

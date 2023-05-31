@@ -5,13 +5,22 @@
       "mode": "lines",
       "x": [],
       "y": [],
-      "name": "0.1 BTC Value",
+      "name": "Bitcoin Price",
       "fill": "none",
       "yaxis": "y1"
+    },
+    {
+      "type": "scatter",
+      "mode": "lines",
+      "x": [],
+      "y": [],
+      "name": "Ethereum Volume",
+      "fill": "tozeroy",
+      "yaxis": "y2"
     }
   ],
   "layout": {
-    "title": { "text": "0.1 BTC Value over the Last 30 Days", "xanchor": "center", "x":0.5},
+    "title": { "text": "Bitcoin Price and Ethereum Volume over the Last Week", "xanchor": "center", "x":0.5},
     "autosize": true,
     "xaxis": {
       "title": "Date",
@@ -26,14 +35,27 @@
       "ticklabelmode": "period"
     },
     "yaxis": {
-      "title": "Value (USD)",
+      "title": "Bitcoin Price (USD)",
       "showgrid": true,
       "zeroline": true,
       "showline": true,
       "autorange": true,
       "showticklabels": true,
       "automargin": true,
-      "type": "linear"
+      "type": "linear",
+      "side": "left"
+    },
+    "yaxis2": {
+      "title": "Ethereum Volume (ETH)",
+      "showgrid": true,
+      "zeroline": true,
+      "showline": true,
+      "autorange": true,
+      "showticklabels": true,
+      "automargin": true,
+      "type": "linear",
+      "overlaying": "y",
+      "side": "right"
     }
   }
 }

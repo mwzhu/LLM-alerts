@@ -18,6 +18,12 @@ LOCAL_INDEX_FILE = "code_snippet_index.json"
 
 app = Flask(__name__)
 
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    if request.method == 'POST':
+        print("Data received from Webhook is: ", request.json)
+        return "Webhook received!"
+
 @app.route("/completions", methods=["POST"])
 def completions():
     """The completions endpoint."""
@@ -66,4 +72,4 @@ def completions():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host="localhost", port=8000)
+    app.run(debug=True, host='0.0.0.0', port=80)
